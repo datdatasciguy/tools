@@ -1,0 +1,29 @@
+COMMAND:
+  - python
+  - run_pipeline.py
+
+TIMEOUT: 1800  # 30 minutes timeout; set to 0 for no timeout
+
+OPTUNA_SETTINGS:
+  study_name: "optuna_pipeline_optimization"
+  max_trials: 50
+  storage: "mysql+pymysql://user:password@hostname/dbname"
+  direction: "minimize"
+
+OPTIMIZE_ARGUMENTS:
+  - name: "--batch-size"
+    suggest_type: "categorical"
+    range_values: [16, 32, 64, 128]
+
+  - name: "--learning-rate="
+    suggest_type: "float"
+    range_values: [0.0001, 0.1]
+
+  - name: "--num-workers="
+    suggest_type: "int"
+    range_values: [1, 8]
+
+ERROR_KEYS:
+  - "Traceback"
+  - "RuntimeError"
+  - "Exception"
